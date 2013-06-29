@@ -1,0 +1,88 @@
+@charset "utf-8";
+/* CSS Document */
+
+a{text-decoration:none; color:rgb(47,79,79); color:#2F4F4F; }
+a:hover{ color:rgb(30,144,255); color:#1E90FF;}
+
+#middle{max-width:1400px; height:800px; margin:0 auto;}
+
+/* #portfolio{	height:0; padding-bottom:60%;} */
+
+#cover{	
+	display:block;
+	color:rgb(213, 207, 207);
+	color:#D5CFCF;
+	font-family: Copperplate Gothic Light, sans-serif;
+	float:right;
+}
+.b-page-cover #cover{margin: 500px 20% 0 0;}
+#cover h1{font-size:250%;}
+#cover h2{font-size:180%; float:right; margin:0;}	
+
+img#me {
+	display:block;
+	max-width:70%;
+	max-height:400px;
+	margin: 0 auto;
+	border-radius: 3px;
+	box-shadow: 0 3px 6px rgba(0,0,0,0.9);
+	}
+@media \0screen {
+  #me { 
+  	width: auto; /* for ie 8 */
+  }
+}
+.icons a, .linkedin-image, .linkedin-image:hover, .blogger-image, .blogger-image:hover{
+    max-width: 30%;
+    margin: 0 auto;
+    vertical-align: middle;
+	padding-bottom: 25%;
+	text-indent:-9999px;
+	background-size:90%;
+	-o-transition: all .3s;
+    -moz-transition: all .3s;
+    -webkit-transition: all .3s;
+    -ms-transition: all .3s;
+}
+
+.icons a{
+	display: block;	
+	opacity: 0.5;
+	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+	filter: alpha(opacity=50);
+}
+.icons a:hover{
+	opacity: 1;
+	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+	filter: alpha(opacity=100);
+}
+#social-media{list-style:none; text-align:center; margin:0; padding:0;}
+#social-media li{display:inline; padding:5px;}
+#social-media li a{width:15%; max-width:68px; min-width:32px; margin-left:5%;}
+.linkedin-image, .linkedin-image:hover, .blogger-image, .blogger-image:hover{
+ 	display:inline-block; padding-left:3%; padding-bottom:15%;
+}
+.linkedin-image, .linkedin-image:hover, .blogger-image, .blogger-image:hover{text-indent:0; line-height:0; font-size:0; overflow:hidden;}
+
+.git-image{background:url(images/rsz_blacktocat.png) no-repeat; background-size:100%;}
+.linkedin-image{background:url(images/linkedin-bel.png) no-repeat; background-size:100%;}
+.linkedin-image:hover{background:url(images/linkedin.png) no-repeat; background-size:100%;}
+.blogger-image{background:url(images/blogger-bel.png) no-repeat; background-size:100%;}
+.blogger-image:hover{background:url(images/blogger.png) no-repeat; background-size:100%;}
+
+.video-container {     
+	position: relative;     
+	padding-bottom: 56.25%;     
+	padding-top: 30px; 
+	height: 0; 
+	overflow: hidden; 
+} 
+.video-container iframe, 
+.video-container object, 
+.video-container embed {     
+	position: absolute;     
+	top: 0;     
+	left: 0;    
+	width: 100%;     
+	height: 100%; 
+}
