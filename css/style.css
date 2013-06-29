@@ -1,6 +1,7 @@
 @charset "utf-8";
 /* CSS Document */
 
+h1{margin-bottom:8%;}
 a{text-decoration:none; color:rgb(47,79,79); color:#2F4F4F; }
 a:hover{ color:rgb(30,144,255); color:#1E90FF;}
 
@@ -22,7 +23,7 @@ a:hover{ color:rgb(30,144,255); color:#1E90FF;}
 img#me {
 	display:block;
 	max-width:70%;
-	max-height:400px;
+	max-height:300px;
 	margin: 0 auto;
 	border-radius: 3px;
 	box-shadow: 0 3px 6px rgba(0,0,0,0.9);

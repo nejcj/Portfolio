@@ -11,7 +11,7 @@ $(document).ready(function(){
 		easing:  null,
         easeIn:  null,
         easeOut: null,
-		shadows: false
-
+		shadows: false,
+		arrows: true
 	});	
 });
