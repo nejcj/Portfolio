@@ -12,6 +12,8 @@ $(document).ready(function(){
         easeIn:  null,
         easeOut: null,
 		shadows: false,
-		arrows: true
+		arrows: true,
+		menu: '#custom-menu',
+        chapterSelector: true
 	});	
 });
