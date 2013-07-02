@@ -11,7 +11,7 @@
  */
 	.booklet         {position:relative; margin:0 auto 10px; overflow:visible !important;}
 	.booklet .b-page {left:0; top:0; position:absolute; overflow:hidden; padding:0; outline:1px solid transparent;
-					  font-family: Rockwell, "Courier Bold", Courier, Georgia, Times, "Times New Roman", serif;}
+					  font-family: "Courier Bold", Courier, Georgia, Times, "Times New Roman", serif;}
 	
 	.booklet .b-pN  {}
 	.booklet .b-p0  {}

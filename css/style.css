@@ -5,7 +5,7 @@ h1{margin-bottom:8%;}
 a{text-decoration:none; color:rgb(47,79,79); color:#2F4F4F; }
 a:hover{ color:rgb(30,144,255); color:#1E90FF;}
 
-#middle{max-width:1400px; height:800px; margin:0 auto;}
+#middle{max-width:1400px; height:800px; width:80%; margin:0 auto;}
 
 /* #portfolio{	height:0; padding-bottom:60%;} */
 
