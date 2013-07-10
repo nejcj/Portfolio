@@ -1,0 +1,3 @@
+
+Vizualizacija_F1
+Vizualizacija_F1.jar,core.jar
