@@ -1,0 +1,66 @@
+@charset "utf-8";
+/* CSS Document */
+
+/* main page style */
+
+body{background-color: #22273C;}
+h1, h2{font-family: Copperplate Gothic Light, sans-serif; color:#CA6820;}
+a{text-decoration:none; color:rgb(196, 195, 191); color:#C4C3BF;}
+a:hover{color:rgb(30,144,255); color:#1E90FF;}
+ul{list-style:none;}
+
+#loading{color:#C4C3BF;}
+.canvasPlayer, #buttons 
+{
+	text-align:center;
+	margin-top:30px;	
+}
+.canvasPlayer{float:left;}
+#firstVideo{display:none;}
+
+#buttons li
+{
+	text-align:left;
+	list-style-type: none;
+}
+/*#Layer1{
+	border: dotted 3px black;
+}*/
+.hide{display:none;}
+.show{display:block;}
+.showPlayed{display:inline-block;}
+
+#progressBar {
+	position: absolute;
+	border:1px solid #aaa;
+	color: #F00;
+	height:15px;
+	margin-left:2px;
+}
+#played {
+	background-color:#03C;
+	height:15px;
+	display:inline-block;
+}
+#playPause #stop{position: absolute;}
+#textInput, #buttons{
+	color:whitesmoke;
+	float: left;
+	position: absolute;
+}
+#textInput p{margin: 0px;}
+
+.showAlerts{
+	background-color:#D3580B;
+	display: inline-block;
+}
+/* #inputText, #inputSFrame, #inputEFrame, #inputXCoord, #inputYCoord{
+	background-color:#D3580B;
+	display: inline-block;
+}
+*/
+#counter{
+	display: inline-block;
+	color:whitesmoke;
+}
+

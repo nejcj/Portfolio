@@ -1,0 +1,34 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Annotated Video</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" />
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="js/annotations.js"></script>
+</head>
+<body>
+    <div id="loading" ><p>Please wait while loading...</p></div>
+    <div class="canvasPlayer">
+        <video id="firstVideo" src="video/bicycle.mp4">Unsupported video on your browser. Get new browser</video>
+		<canvas id="Layer1" style="position:absolute; z-index:1;"></canvas>
+	</div>
+    <div id="progressBar" class="hide"><span id="played"></span></div>
+    <div>
+    	<button id="playPause" title="play" class="hide">Play</button>
+        <button id="stop" class="hide">Stop</button>
+        <p id="counter"></p>
+    </div>
+	<p>&nbsp;</p>
+	<ul id="buttons" class="hide">
+    </ul>
+    <div id="textInput" class="hide">
+  		Text input <input id="tinput" type="text" name="tinput" size="32" maxlength="52" /><br />
+  		Start Frame <input id="sframe" type="text" name="sframe" maxlength="3" size="5" /><br />
+        End Frame <input id="eframe" type="text" name="eframe" maxlength="3" size="5" /><br />
+        X coordiante <input id="xcoord" type="text" name="xcoord" maxlength="3" size="5" /><br />
+        Y coordinate <input id="ycoord" type="text" name="ycoord" maxlength="3" size="5" /><br />
+  		<button id="submit" title="Submit">Submit</button>
+    </div>
+</body>
+</html>
