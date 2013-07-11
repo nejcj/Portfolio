@@ -5,7 +5,7 @@
 <title>Annotated Video</title>
 <link rel="stylesheet" type="text/css" href="css/style.css" />
 <script src="http://code.jquery.com/jquery-latest.js"></script>
-<script src="annotations.js"></script>
+<!-- <script src="annotations.js"></script> -->
 <script>
 
 $(document).ready(function() {
@@ -39,7 +39,7 @@ $(document).ready(function() {
 		$.ajax({
 			type: "GET",
 			dataType: "json",
-			url: "https://dl.dropbox.com/u/95398407/JansaNejcDiplomskaNaloga/bicycle2.json",
+			url: "http://portfolionejcj.herokuapp.com/diplomska/json/bicycle2.json",
 			success: function(data){
 
 					/* Funkcije, kjer se shranjujejo podatki iz JSONA */
