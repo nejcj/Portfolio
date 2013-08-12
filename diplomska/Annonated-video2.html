@@ -618,121 +618,13 @@ $(document).ready(function() {
         		ctx[noLayer].fillText(text, x1, y1);
 		 	}		
 		  }
-		//  Izracun width, height in ratio videa  
-		theVideo.addEventListener('loadedmetadata', function() {
-			ratio = theVideo.videoWidth / theVideo.videoHeight;				
-			w = theVideo.videoWidth;				
-			h = parseInt(w/ratio, 10);	
-			for(var i=0; i<theCanvas.length; i++)
-			{			
-				theCanvas[i].width=w; 
-				theCanvas[i].height=h; 
-			}
-			$('#loading').addClass("hide");
-			$("#Layer1").css("border","dotted",3,"black");
-			$("#progressBar").removeClass("hide").addClass("showPlayed");
-			$("#playPause").removeClass("hide").addClass("showPlayed");
-			$("#stop").removeClass("hide").addClass("showPlayed");
-			$("#textInput").removeClass("hide").addClass("show");
-			$("#buttons").removeClass("hide").addClass("show");
-			$("#textInput").css("margin-top",h-h-h-60); $("#textInput").css("left", w+200);
-			$("#buttons").css("margin-top",h-h-h-60); $("#buttons").css("left", w);
-			$("#progressBar").css("margin-top",h+40);
-			$("#progressBar").css("width",w);
-			$("#playPause").css("margin-top",h+60);
-			$("#stop").css("margin-top",h+60);
-			document.getElementById("counter").innerHTML = "Frame: ";
-			$("#counter").css("margin-left",w-180);  
-			
-		}, false);	
-		
-		// Po kliku na play prikaze vse atribute v canvasih
-		theVideo.addEventListener('play', function() {
-			setInterval(snap, 1000/points.frameRate);
-			setInterval(rect, 1000/points.frameRate);
-			setInterval(text, 1000/points.frameRate);
-//			if($('#textCanvas').length > 0)
-//				setInterval(inputTextDraw, 1000/points.frameRate);
-//			setInterval(textShow, 1000/points.frameRate);
-		}, false);
-		
-		theVideo.addEventListener('paused', function() {
-			clearInterval();
-		}, false);
-		theVideo.addEventListener('ended', function() {
-			clearInterval();
-		}, false);
-		
-		$("#stop").click(function(){
-			theVideo.pause();
-			theVideo.currentTime=0;
-		});
-		
-		$("#playPause").click(function(){
-			if(theVideo.paused || theVideo.ended)
-			{
-				document.getElementById("playPause").title = 'play';
-				document.getElementById("playPause").innerHTML = "Pause";	
-				theVideo.play();
-			}
-			else
-			{
-				document.getElementById("playPause").title = 'pause';
-				document.getElementById("playPause").innerHTML = "Play";	
-				theVideo.pause();	
-			}
-		});
-		
-		theVideo.addEventListener('timeupdate', updateProgress, false);
-		
-		function updateProgress() {
-			var value = 0;
-			if (theVideo.currentTime > 0) {
-				value = Math.floor((100 / theVideo.duration) * theVideo.currentTime);
-			}
-			document.getElementById("played").style.width = value + "%";
-		}
-		
-		
-		var progressBar = document.getElementById("progressBar");
-		
-		progressBar.addEventListener("mouseup", function(e)
-			{ setPlayPosition(e.pageX); }, false);
-			
-		function setPlayPosition(x) {
-			var progressBar = document.getElementById("progressBar");
-			var value = (x - findPos(progressBar)).toFixed(2);
-			var timeToSet = ((theVideo.duration /
-				progressBar.offsetWidth).toFixed(2) * value).toFixed(2);
-			theVideo.currentTime = timeToSet;
-		}
-		
-		function findPos(obj) {
-			var curleft = 0;
-			if (obj.offsetParent) {
-				do { curleft += obj.offsetLeft; } while
-					(obj = obj.offsetParent);
-			}
-			return curleft;
-		}
-		
-		$('ul').on('click', 'button', function() {
-			
-			var buttonElementId = $(this).attr('id');
-			var buttonTitle = "#"+$(this).attr('title');	
+		  
+		  var text2 = function(x1,y1,text,noLayer){					
 				
-			if($(buttonTitle).hasClass("show"))
-			{
-				
-				$(buttonTitle).removeClass("show").addClass("hide");
-				document.getElementById(buttonElementId).innerHTML = "Show";
-			}
-			else
-			{
-				$(buttonTitle).removeClass("hide").addClass("show");
-				document.getElementById(buttonElementId).innerHTML = "Hide";
-			}
-		});
+				ctx[noLayer].font = '18pt Calibri';
+        		ctx[noLayer].fillStyle = 'red';
+        		ctx[noLayer].fillText(text, x1, y1);
+		 	}		
 		
 		/*Tu se zacnejo funkcije, kjer dodajamo layer s textom*/
 		
@@ -794,8 +686,9 @@ $(document).ready(function() {
 				theCanvas[numCanvas+parseInt(2)] = document.getElementById("textCanvas");
 				ctx[numCanvas+parseInt(2)] = theCanvas[numCanvas+parseInt(2)].getContext("2d");
 				drawText = {"textInput":textInput, "startFrame":startFrame, "endFrame":endFrame, "xCoordinate":xCoordinate, "yCoordinate":yCoordinate, "textCanvNum":textCanvNum-1};
+				blank(textCanvNum-1);
 				
-				
+				/*
 				var jsonFile = '{"title":"Saved text file on computer","frameRate":"","layer":[{"name":"savedText", "label":"SHA", "type":"text"}],"sequence":[]}';
 				var obj = jQuery.parseJSON(jsonFile);
 				
@@ -810,13 +703,14 @@ $(document).ready(function() {
 						obj.sequence[i].push({});
 				}
 				
+				
 				var filepath = "file:///C:/Users/Nejko/Dropbox/Public/JansaNejcDiplomskaNaloga/test.json"; // Get the current file
 				filepath = $.twFile.convertUriToLocalPath(filepath); // Convert the path to a readable format
 				var text = $.twFile.save(filepath,obj); // Load the file
 				
 				if(text)
 					alert("Saved successfully");
-					
+				*/	
 				// ajax resitev, ki bo shranila v tekstovno datoteko na strezniku
 				//var text2 = JSON.stringify(obj,text2);
 //				
@@ -843,7 +737,7 @@ $(document).ready(function() {
 		var inputTextDraw = function(){
 			if(Math.floor((theVideo.currentTime*points.frameRate).toPrecision(3))== drawText.startFrame)
 			{
-				text(drawText.xCoordinate,drawText.yCoordinate,drawText.textInput, drawText.textCanvNum); 
+				text2(drawText.xCoordinate,drawText.yCoordinate,drawText.textInput, drawText.textCanvNum); 
 			}
 			else if(Math.floor((theVideo.currentTime*points.frameRate).toPrecision(3)) <= drawText.endFrame)
 				{}
@@ -851,10 +745,123 @@ $(document).ready(function() {
 				blank(drawText.textCanvNum);	
 		}
 		
-		theVideo.addEventListener('play', function(){
+		/* Tu se začnjeo funkcije, ki prikažejo canvase ter interaktivnost gumbov ter canvasov*/
+		
+		//  Izracun width, height in ratio videa  
+		theVideo.addEventListener('loadedmetadata', function() {
+			ratio = theVideo.videoWidth / theVideo.videoHeight;				
+			w = theVideo.videoWidth;				
+			h = parseInt(w/ratio, 10);	
+			for(var i=0; i<theCanvas.length; i++)
+			{			
+				theCanvas[i].width=w; 
+				theCanvas[i].height=h; 
+			}
+			$('#loading').addClass("hide");
+			$("#Layer1").css("border","dotted",3,"black");
+			$("#progressBar").removeClass("hide").addClass("showPlayed");
+			$("#playPause").removeClass("hide").addClass("showPlayed");
+			$("#stop").removeClass("hide").addClass("showPlayed");
+			$("#textInput").removeClass("hide").addClass("show");
+			$("#buttons").removeClass("hide").addClass("show");
+			$("#textInput").css("margin-top",h-h-h-60); $("#textInput").css("left", w+200);
+			$("#buttons").css("margin-top",h-h-h-60); $("#buttons").css("left", w);
+			$("#progressBar").css("margin-top",h+40);
+			$("#progressBar").css("width",w);
+			$("#playPause").css("margin-top",h+60);
+			$("#stop").css("margin-top",h+60);
+			document.getElementById("counter").innerHTML = "Frame: ";
+			$("#counter").css("margin-left",w-180);  
 			
+		}, false);	
+		
+		// Po kliku na play prikaze vse atribute v canvasih
+		theVideo.addEventListener('play', function() {
+			setInterval(snap, 1000/points.frameRate);
+			setInterval(rect, 1000/points.frameRate);
+			setInterval(text, 1000/points.frameRate);
+			if($('#textCanvas').length > 0)
+				setInterval(inputTextDraw, 1000/points.frameRate);
+			//setInterval(textShow, 1000/points.frameRate);
 		}, false);
 		
+		theVideo.addEventListener('paused', function() {
+			clearInterval();
+		}, false);
+		theVideo.addEventListener('ended', function() {
+			clearInterval();
+		}, false);
+		
+		$("#stop").click(function(){
+			theVideo.pause();
+			theVideo.currentTime=0;
+		});
+		
+		$("#playPause").click(function(){
+			if(theVideo.paused || theVideo.ended)
+			{
+				document.getElementById("playPause").title = 'play';
+				document.getElementById("playPause").innerHTML = "Pause";	
+				theVideo.play();
+			}
+			else
+			{
+				document.getElementById("playPause").title = 'pause';
+				document.getElementById("playPause").innerHTML = "Play";	
+				theVideo.pause();	
+			}
+		});
+		
+		theVideo.addEventListener('timeupdate', updateProgress, false);
+		
+		function updateProgress() {
+			var value = 0;
+			if (theVideo.currentTime > 0) {
+				value = Math.floor((100 / theVideo.duration) * theVideo.currentTime);
+			}
+			document.getElementById("played").style.width = value + "%";
+		}
+		
+		/*Progress bar intialized*/
+		var progressBar = document.getElementById("progressBar");
+		
+		progressBar.addEventListener("mouseup", function(e)
+			{ setPlayPosition(e.pageX); }, false);
+			
+		function setPlayPosition(x) {
+			var progressBar = document.getElementById("progressBar");
+			var value = (x - findPos(progressBar)).toFixed(2);
+			var timeToSet = ((theVideo.duration /
+				progressBar.offsetWidth).toFixed(2) * value).toFixed(2);
+			theVideo.currentTime = timeToSet;
+		}
+		
+		function findPos(obj) {
+			var curleft = 0;
+			if (obj.offsetParent) {
+				do { curleft += obj.offsetLeft; } while
+					(obj = obj.offsetParent);
+			}
+			return curleft;
+		}
+		
+		$('ul').on('click', 'button', function() {
+			
+			var buttonElementId = $(this).attr('id');
+			var buttonTitle = "#"+$(this).attr('title');	
+				
+			if($(buttonTitle).hasClass("show"))
+			{
+				
+				$(buttonTitle).removeClass("show").addClass("hide");
+				document.getElementById(buttonElementId).innerHTML = "Show";
+			}
+			else
+			{
+				$(buttonTitle).removeClass("hide").addClass("show");
+				document.getElementById(buttonElementId).innerHTML = "Hide";
+			}
+		});
 	});		
 </script>
 </head>

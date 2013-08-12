@@ -1,13 +1,7 @@
-<!DOCTYPE HTML>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Annotated Video</title>
-<link rel="stylesheet" type="text/css" href="css/style.css" />
-<script src="http://code.jquery.com/jquery-latest.js"></script>
-<!-- <script src="http://svn.tiddlywiki.org/Trunk/core/jquery/plugins/jQuery.twFile.js"></script> -->
-<script>	
+// JavaScript Document
 $(document).ready(function() {
+		
+		/*Initialisation of variables, tables and objects*/
 		
 		var theCanvas = [];
 		var ctx = [];
@@ -29,26 +23,25 @@ $(document).ready(function() {
 		//points.circle.r=[]; points.circle.x1=[]; points.circle.y1=[]; 
 		//points.oval.x1=[]; points.oval.y1=[]; points.oval.width=[]; points.oval.height=[];
 		 
-		
 		var jsonObj;
 		var numCanvas=0; var numFrames=0;
-		var ajaxEnded=0;
 		
+		// calling of ajax function		
 		$.ajax({
 			type: "GET",
 			dataType: "json",
-			url: "https://dl.dropbox.com/u/95398407/JansaNejcDiplomskaNaloga/showText2.json",
+			url: "https://dl.dropbox.com/u/95398407/JansaNejcDiplomskaNaloga/bicycle2.json",
 			success: function(data){
 
 					/* Funkcije, kjer se shranjujejo podatki iz JSONA */
-					
 					jsonObj = data;
 					
 					var enumRect=0, enumText=0, enumLine=0, enumPoint=0, enumCircle=0, enumOval=0;
 					
+					/* going through each layer*/
 					$.each(jsonObj.layers, function(i, obj){														
 							var num = i + parseInt(2);
-							canvasName[i] = {"layer" : jsonObj.layers[i].label, "name":jsonObj.layers[i].name, "type": jsonObj.layers[i].type, "interactive":jsonObj.layers[i].interactive};
+							canvasName[i] = {"layer" : jsonObj.layers[i].label, "name":jsonObj.layers[i].name, "type": jsonObj.layers[i].type};
 							
 							if(canvasName[i].type == "rect")
 							{
@@ -57,10 +50,10 @@ $(document).ready(function() {
 							}
 							if(canvasName[i].type == "text")
 							{
-									points.text[enumText] = {"name":canvasName[i].name, "x1":[], "y1":[], "text":[], "length":[]};
+									points.text[enumText] = {"name":canvasName[i].name, "x1":[], "y1":[], "text":[], "length":0};
 									enumText++;
 							}
-							/*if(canvasName[i].type == "line")
+							if(canvasName[i].type == "line")
 							{
 									points.line[enumLine] = {"name":canvasName[i].name, "x1":[], "x2":[], "y1":[], "y2":[]};
 									enumLine++;
@@ -79,9 +72,11 @@ $(document).ready(function() {
 							{
 									points.oval[enumOval] = {"name":canvasName[i].name, "x1":[], "y1":[], "height":[], "width":[]};
 									enumOval++;
-							}*/
+							}
 							
+							/*adding layers of different annotations*/
 							$(".canvasPlayer").append("<canvas id='"+canvasName[i].layer+"' class='show' style='position:absolute; z-index:"+num+";'></canvas>");
+							/*adding appearance buttons of different annotations*/
 							$("#buttons").append("<li><button id='LayerButton"+(parseInt(i)+parseInt(1))+"' title = '"+canvasName[i].layer+"'>Hide</button>Layer: "+canvasName[i].layer+"</li>")
 							theCanvas[i+parseInt(1)] = document.getElementById(canvasName[i].layer);
 							ctx[i+parseInt(1)] = theCanvas[i+parseInt(1)].getContext("2d");
@@ -97,19 +92,15 @@ $(document).ready(function() {
 						
 					points.frameRate = jsonObj.frameRate;
 					
-					var textCounter=[];					
 					$.each(jsonObj.sequence, function(i, obj){
-						var numRect = []; var numLine = []; var numPoint = []; var numCircle = []; var numOval = []; var numText = [];	
-						var checkObjectsInFrame=0;			
+						var numRect = []; var numLine = []; var numPoint = []; var numCircle = []; var numOval = []; var numText = [];				
 						
 						$.each(jsonObj.sequence[i], function(j, obj){
 														
-							checkObjectsInFrame = j+1;
 							for(k in points.rect)
 							{
 								if(numRect[k]!=0)
-									numRect[k]=0;						
-								
+									numRect[k]=0;
 								if(jsonObj.sequence[i][j].type == "rect" && jsonObj.sequence[i][j].layer == points.rect[k].name){
    									points.rect[k].x1.push({"x1":jsonObj.sequence[i][j].x, "layer" : jsonObj.sequence[i][j].layer});
 									points.rect[k].y1.push({"y1":jsonObj.sequence[i][j].y, "layer" : jsonObj.sequence[i][j].layer});
@@ -125,24 +116,16 @@ $(document).ready(function() {
 							
 							for(k in points.text)
 							{
-								if(numText[k]!=0)
-									numText[k]=0;
-																
 								if(jsonObj.sequence[i][j].type == "text" && jsonObj.sequence[i][j].layer == points.text[k].name){
-									
-   										points.text[k].x1.push({"x1":jsonObj.sequence[i][j].x, "layer" : jsonObj.sequence[i][j].layer});
-										points.text[k].y1.push({"y1":jsonObj.sequence[i][j].y, "layer" : jsonObj.sequence[i][j].layer});
-										points.text[k].text.push({"text":jsonObj.sequence[i][j].text, "layer" : jsonObj.sequence[i][j].layer});
-										points.text[k].length.push({"length":jsonObj.sequence[i][j].length, "layer" : jsonObj.sequence[i][j].layer});
-									//numText[k]=1;
-								}
-								else
-								{
-									numText[k]++;	
+   									points.text[k].x1.push({"x1":jsonObj.sequence[i][j].x, "layer" : jsonObj.sequence[i][j].layer});
+									points.text[k].y1.push({"y1":jsonObj.sequence[i][j].y, "layer" : jsonObj.sequence[i][j].layer});
+									points.text[k].text.push({"text":jsonObj.sequence[i][j].text, "layer" : jsonObj.sequence[i][j].layer});
+									points.text[k].length.push({"length":jsonObj.sequence[i][j].length, "layer" : jsonObj.sequence[i][j].layer});
+									numText[k]=1;
 								}
 							}
 
-							/*
+							
 							for(k in points.line)
 							{
 								if(jsonObj.sequence[i][j].type == "line" && jsonObj.sequence[i][j].layer == points.line[k].name){
@@ -184,11 +167,11 @@ $(document).ready(function() {
 									numOval[k]=1;					
 								}
 							}
-							*/
+							
 						});
 						
 						for(j in numRect){
-							if(numRect[j] == checkObjectsInFrame)
+							if(numRect[j] == points.rect.length)
 							{
 								points.rect[j].x1.push({"x1" : 0, "layer" : points.rect[j].name});
 								points.rect[j].y1.push({"y1" : 0, "layer" : points.rect[j].name});
@@ -197,15 +180,15 @@ $(document).ready(function() {
 							}
 						}
 						for(j in numText){
-							if(numText[j] == checkObjectsInFrame)
+							if(numText[j] == points.text.length)
 							{
 								points.text[j].x1.push({"x1" : 0, "layer" : points.text[j].name});
 								points.text[j].y1.push({"y1" : 0, "layer" : points.text[j].name});
 								points.text[j].text.push({"text" : "", "layer" : points.text[j].name});
-								points.text[j].length.push ({"length" : 0, "layer" : points.text[j].name});	
+								points.text[j].length.push({"length" : 0, "layer" : points.text[j].name});	
 							}
 						}
-						/*
+						
 						for(j in numLine){
 							if(numLine[j] == 0)
 							{
@@ -238,48 +221,11 @@ $(document).ready(function() {
 								points.oval[i].height.push({"height" : 0, "layer" : "default"});
 								points.oval.width.push({"width" : 0, "layer" : "default"});
 							}
-						}*/										
+						}								
 						numFrames++;
-					});
-					for(var i=0; i<theCanvas.length; i++)
-					{			
-						theCanvas[i].width=w; 
-						theCanvas[i].height=h; 
-					}
-					$('#loading').addClass("hide");
-					$("#Layer1").css("border","dotted",3,"black");
-					$("#progressBar").removeClass("hide").addClass("showPlayed");
-					$("#playPause").removeClass("hide").addClass("showPlayed");
-					$("#stop").removeClass("hide").addClass("showPlayed");
-					$("#textInput").removeClass("hide").addClass("show");
-					$("#buttons").removeClass("hide").addClass("show");
-					$("#textInput").css("margin-top",h-h-h-60); $("#textInput").css("left", w+200);
-					$("#buttons").css("margin-top",h-h-h-60); $("#buttons").css("left", w);
-					$("#progressBar").css("margin-top",h+40);
-					$("#progressBar").css("width",w);
-					$("#playPause").css("margin-top",h+60);
-					$("#stop").css("margin-top",h+60);
-					document.getElementById("counter").innerHTML = "Frame: ";
-					$("#counter").css("margin-left",w-180);  	
-					
-					/*Klik na anotacijo preide na novo stran*/
-					theCanvas[theCanvas.length-1].addEventListener('mousedown', function(evt) {
-						var mousePos = getMousePos(theCanvas[addedRect.noLayer], evt);
-						if(mousePos.x>=addedRect.x && mousePos.x<=(addedRect.x+addedRect.width) 
-				   		   && mousePos.y>=addedRect.y && mousePos.y<=(addedRect.y+addedRect.height))
-						{
-							window.open('http:\\www.rtvslo.si');
-						}
-					
-						if(mousePos.x>=theCanvas[addedRect.noLayer].width*0.25 && mousePos.x<=theCanvas[addedRect.noLayer].width*0.75 &&
-							mousePos.y>=theCanvas[addedRect.noLayer].height*0.75 && mousePos.y<=theCanvas[addedRect.noLayer].height)
-						{
-    						window.open('http:\\www.rtvslo.si');
-						}
-					}, false);	
+					});			
 				}
 			});
-		// Stevilo layerjev v objektu
 		
 		/* Funkcije, kjer se risejo stvari */
 		
@@ -298,49 +244,49 @@ $(document).ready(function() {
 		
 		var numLayer = function(shapeNum ,frameNum, vector){
 			if(vector == "rect"){
-				for(abc in canvasName){
-					if(points.rect[shapeNum].x1[frameNum].layer == canvasName[abc].name)
-						return parseInt(abc);
+				for(i in canvasName){
+					if(points.rect[shapeNum].x1[frameNum].layer == canvasName[i].name)
+						return parseInt(i);
 					if(points.rect[shapeNum].x1[frameNum].layer == "default")
 						return parseInt(canvasName.length-1);
 				}
 			}
 			if(vector == "point"){
-				for(abc in canvasName){
-					if(points.point[shapeNum].x1[frameNum].layer == canvasName[abc].name)
-						return parseInt(abc);
+				for(i in canvasName){
+					if(points.point[shapeNum].x1[frameNum].layer == canvasName[i].name)
+						return parseInt(i);
 					if(points.point[shapeNum].x1[frameNum].layer == "default")
 						return parseInt(canvasName.length-1);
 				}
 			}
 			if(vector == "line"){
-				for(abc in points.line){
-					if(points.line[shapeNum].x1[frameNum].layer == canvasName[abc].name)
-						return parseInt(abc);
+				for(j in points.line){
+					if(points.line[shapeNum].x1[frameNum].layer == canvasName[i].name)
+						return parseInt(i);
 					if(points.line[shapeNum].x1[frameNum].layer == "default")
 						return parseInt(canvasName.length-1);
 				}
 			}
 			if(vector == "circle"){
-				for(abc in points.circle){
-					if(points.circle[shapeNum].x1[frameNum].layer == canvasName[abc].name)
-						return parseInt(abc);
+				for(j in points.circle){
+					if(points.circle[shapeNum].x1[frameNum].layer == canvasName[i].name)
+						return parseInt(i);
 					if(points.circle[shapeNum].x1[frameNum].layer == "default")
 						return parseInt(canvasName.length-1);
 				}
 			}
 			if(vector == "oval"){
-				for(abc in canvasName){
-					if(points.oval[shapeNum].x1[frameNum].layer == canvasName[abc].name)
-						return parseInt(abc);	
+				for(i in canvasName){
+					if(points.oval[shapeNum].x1[frameNum].layer == canvasName[i].name)
+						return parseInt(i);	
 					if(points.oval[shapeNum].x1[frameNum].layer == "default")
 						return parseInt(canvasName.length-1);
 				}
 			}
 			if(vector == "text"){
-				for(abc in canvasName){
-					if(points.text[shapeNum].x1[frameNum].layer == canvasName[abc].name)
-						return parseInt(abc);
+				for(i in canvasName){
+					if(points.text[shapeNum].x1[frameNum].layer == canvasName[i].name)
+						return parseInt(i);
 					if(points.text[shapeNum].x1[frameNum].layer == "default")
 						return parseInt(canvasName.length-1);
 				}
@@ -400,24 +346,18 @@ $(document).ready(function() {
 					ctx[noLayer].strokeStyle = 'green';
 
 				ctx[noLayer].lineWidth = 1.5;
-				ctx[noLayer].strokeRect(x1,y1,x2,y2);
-				
-				if(canvasName[noLayer-1].interactive == "yes")
-				{
-					addedRect = {"noLayer": noLayer, "x": 40, "y":45, "width":60, "height":120 };
-					textShow();
-				}
-				
-			}	
+				ctx[noLayer].strokeRect(x1,y1,x2,y2);	
+			}
+			
+			//addedRect = {"noLayer": noLayer, "x": x1, "y":y1, "width":x2, "height":y2 };		
+			
 		};
 		
 		function writeMessage(canvas, ctx, message) {
         	
-        	var x1 = canvas.width*(0.5);
-			var y1 = canvas.height*(0.875);
-			ctx.textAlign = "center";
-			ctx.textBaseline = "middle";
-			ctx.font = '16pt Calibri';
+        	var x1 = canvas.width*(0.25 + 0.155);
+			var y1 = canvas.height*(0.75 + 0.145);
+			ctx.font = '12pt Calibri';
         	ctx.fillStyle = 'black';
         	ctx.fillText(message, x1, y1);
 		}
@@ -427,7 +367,7 @@ $(document).ready(function() {
 			var y1 = canvas.height*0.75;
 			var height = canvas.height*0.25;
 			var width = canvas.width*0.5;
-			ctx.fillStyle = "rgba(255, 0, 0, 0.9)";
+			ctx.fillStyle = "rgba(255, 0, 0, 0.2)";
 			ctx.fillRect(x1,y1,width,height);	
 		}
 		
@@ -439,23 +379,47 @@ $(document).ready(function() {
         	};
       	}
 		
-		var rectDraw = 0;
+		var triggerText = 0;
 		var textShow = function() {
-			theCanvas[theCanvas.length-1].addEventListener('mousemove', function(evt) {
+			theCanvas[addedRect.noLayer+1].addEventListener('mousemove', function(evt) {
           		var mousePos = getMousePos(theCanvas[addedRect.noLayer], evt);
           		var message = 'Click me';
           		if(mousePos.x>=addedRect.x && mousePos.x<=(addedRect.x+addedRect.width) 
-				   && mousePos.y>=addedRect.y && mousePos.y<=(addedRect.y+addedRect.height)
-				   && rectDraw == 0)
+				   && mousePos.y>=addedRect.y && mousePos.y<=(addedRect.y+addedRect.height))
 				{
-					drawRect(theCanvas[theCanvas.length-1], ctx[theCanvas.length-1]);
-					writeMessage(theCanvas[theCanvas.length-1], ctx[theCanvas.length-1], message);
-					rectDraw++;
+					drawRect(theCanvas[addedRect.noLayer+1], ctx[addedRect.noLayer+1]);
+					writeMessage(theCanvas[addedRect.noLayer+1], ctx[addedRect.noLayer+1], message);
+					triggerText = 1;
+					window.open('http:\\www.rtvslo.si');
 				}
-				else{}
-
+				else
+					triggerText = 0;
+				
+				theCanvas[addedRect.noLayer+1].addEventListener('mousedown', function(evt) {
+					var mousePos2 = getMousePos(theCanvas[addedRect.noLayer+1], evt);
+					if(mousePos2.x>=theCanvas[addedRect.noLayer+1].width*0.25 && mousePos2.x<=theCanvas[addedRect.noLayer+1].width*0.75 &&
+						mousePos2.y>=theCanvas[addedRect.noLayer+1].height*0.75 && mousePos2.y<=theCanvas[addedRect.noLayer+1].height)
+					{
+    					window.open('http:\\www.rtvslo.si');
+					}
+				}, false);
         	}, false);		
 		}
+		
+		
+//		theVideo.addEventListener('play', function(){
+//			theCanvas[addedRect.noLayer+1].addEventListener('mousedown', function(evt) {
+//				var mousePos = getMousePos(theCanvas[addedRect.noLayer+1], evt);
+//				if(mousePos.x>=theCanvas[addedRect.noLayer+1].width*0.25 && mousePos.x<=theCanvas[addedRect.noLayer+1].width*0.75 &&
+//					mousePos.y>=theCanvas[addedRect.noLayer+1].height*0.75 && mousePos.y<=theCanvas[addedRect.noLayer+1].height)
+//				{
+//					$("#"+canvasName[addedRect.noLayer+1]).click(function(e){
+//    					window.open('www.rtvslo.si');
+//						return false;
+// 					});
+//				}
+//			}, false);
+//		},false);
 		  
 		// ostali liki
 		var b=0;
@@ -586,186 +550,78 @@ $(document).ready(function() {
 			  ctx[noLayer].stroke();
 		  };
 		  
-		  var t=[]; var thisLength=[]; var startLength=[];
-		  var text = function(){
+		  var t=0;
+		  var text = function(i){
 				
-			for(xyz in points.text){
-				var x1,y1,text,length;
-				var noLayer = 1;
-
-				if(t[xyz] == null)
-					t[xyz] = 0;			
-				if(t[xyz] == points.text[xyz].x1.length)
-					t[xyz]--;	
-								
-				if(t[xyz] < points.text[xyz].x1.length)
-					noLayer+=numLayer(xyz,t[xyz],"text");
+			var x1,y1,text,length
+			var foundLength;
 			
-				if(!theVideo.currentTime == 0 && !theVideo.paused)
-				{			
-					if(t[xyz]< startLength[xyz]+thisLength[xyz]){
-						x1 = points.text[xyz].x1[startLength[xyz]].x1;
-					  	y1 = points.text[xyz].y1[startLength[xyz]].y1;
-					  	text = points.text[xyz].text[startLength[xyz]].text;
-					  	length = points.text[xyz].length[startLength[xyz]].length;
-					}
-					else{
-					  	x1 = points.text[xyz].x1[t[xyz]].x1;
-					  	y1 = points.text[xyz].y1[t[xyz]].y1;
-					  	text = points.text[xyz].text[t[xyz]].text;
-					  	length = points.text[xyz].length[t[xyz]].length;
-					}
-				}
-				if(points.text[xyz].length[t[xyz]].length!=0){ 
-					startLength[xyz] = t[xyz];
-					thisLength[xyz] = points.text[xyz].length[t[xyz]].length;
-				}
-				if(theVideo.currentTime == 0)
-					  {x1=-1000; y1=-1000; t[xyz]=0; blank(noLayer); startLength[xyz]=0; thisLength[xyz]=0; text="";}
+			if(t == points.text[i].x1.length)
+				t--;
+			
+			if(t < points.text[i].x1.length)
+				noLayer+=numLayer(i,t,"text");
+			
+			if(!theVideo.currentTime == 0 && !theVideo.paused)
+			{			
+				  x1 = points.text[i].x1[t].x1;
+				  y1 = points.text[i].y1[t].y1;
+				  text = points.text[i].text[t].text;
+				  length = points.text[i].length[t].length;
+			}
+			if(length!=0)  
+				foundLength = t;
+			if(theVideo.currentTime == 0)
+				  {x1=-1000; y1=-1000; t=0; blank(noLayer);}
 		    
-				if(theVideo.currentTime > 0 && theVideo.paused){
-					   t[xyz] = videoTime();
-			  	}
+			if(theVideo.currentTime > 0 && theVideo.paused){
+				   t = videoTime();
+			  }
 			
-				if(theVideo.currentTime > 0 &&  t[xyz] < points.text[xyz].x1.length && !theVideo.paused){
-					  t[xyz] = videoTime();
-					  blank(noLayer);
-			  	}
+			if(theVideo.currentTime > 0 && !theVideo.paused){
+				  t = videoTime();
+				  blank(noLayer);
+			  }
+			if( t < length + foundLength)
+				  t = foundLength;
 				
-				ctx[noLayer].font = '18pt Calibri';
-        		ctx[noLayer].fillStyle = 'red';
-        		ctx[noLayer].fillText(text, x1, y1);
-		 	}		
-		  }
-		  
-		  var text2 = function(x1,y1,text,noLayer){					
-				
-				ctx[noLayer].font = '18pt Calibri';
-        		ctx[noLayer].fillStyle = 'red';
-        		ctx[noLayer].fillText(text, x1, y1);
+			ctx[noLayer].font = '18pt Calibri';
+        	ctx[noLayer].fillStyle = 'red';
+        	ctx[noLayer].fillText(text, x1, y1);
 		 }		
-		/*Tu se zacnejo funkcije, kjer dodajamo layer s textom*/
-		
-		var textInput; var startFrame; var endFrame; var xCoordinate; var yCoordinate;
-		var drawText = {};
-		
-		$('#submit').click(function() {
-        	var textCanvNum=0;
-			var isItOk = 0;
-			
-			if($('#tinput').val() != null){
-				textInput = $('#tinput').val();
-				$('#inputText').removeClass('showAlerts').addClass('hide');
-				isItOk++;
-			}
-			else
-				$('#inputText').removeClass('hide').addClass('showAlerts');
-				
-			if($('#sframe').val() != null && $('#sframe').val() >= 0 && $('#sframe').val() < numFrames && $('#sframe').val() < $('#eframe').val()){
-				startFrame = parseInt($('#sframe').val());
-				$('#inputSFrame').removeClass('showAlerts').addClass('hide');
-				isItOk++;
-			}
-			else
-				$('#inputSFrame').removeClass('hide').addClass('showAlerts');
-			
-			if($('#eframe').val() != null && $('#eframe').val() >= 0 && $('#eframe').val() < numFrames && $('#eframe').val() > $('#sframe').val()){
-				endFrame = parseInt($('#eframe').val());
-				$('#inputEFrame').removeClass('showAlerts').addClass('hide');
-				isItOk++;
-			}
-			else
-				$('#inputEFrame').removeClass('hide').addClass('showAlerts');
-			
-		    if($('#xcoord').val() != null && $('#xcoord').val() >= 0 && $('#xcoord').val() < theCanvas[0].width){
-				xCoordinate = parseInt($('#xcoord').val());
-				$('#inputXCoord').removeClass('showAlerts').addClass('hide');
-				isItOk++;
-			}
-			else
-				$('#inputXCoord').removeClass('hide').addClass('showAlerts');
-				
-			if($('#ycoord').val() != null && $('#ycoord').val() >= 0 && $('#ycoord').val() < theCanvas[0].height){
-				yCoordinate = parseInt($('#ycoord').val());
-				$('#inputYCoord').removeClass('showAlerts').addClass('hide');	
-				isItOk++;
-			}
-			else
-				$('#inputYCoord').removeClass('hide').addClass('showAlerts');		
-			
-			
-			if(isItOk==5){
-				
-				textCanvNum = numCanvas+parseInt(3);
-				$(".canvasPlayer").append("<canvas id='textCanvas' class='show' style='position:absolute; z-index:"+textCanvNum+";' width = "+theCanvas[0].width+" height = "+theCanvas[0].height+"></canvas>");
-				canvasName[numCanvas+parseInt(1)] = {"layer" : "textCanvas"};
-				theCanvas[numCanvas+parseInt(2)] = document.getElementById("textCanvas");
-				ctx[numCanvas+parseInt(2)] = theCanvas[numCanvas+parseInt(2)].getContext("2d");
-				drawText = {"textInput":textInput, "startFrame":startFrame, "endFrame":endFrame, "xCoordinate":xCoordinate, "yCoordinate":yCoordinate, "textCanvNum":textCanvNum-1};
-				blank(textCanvNum-1);
-				/*
-				var jsonFile = '{"title":"Saved text file on computer","frameRate":"","layer":[{"name":"savedText", "label":"SHA", "type":"text"}],"sequence":[[]]}';
-				var obj = jQuery.parseJSON(jsonFile);
-				
-				obj.frameRate = points.frameRate
-				
-				for(i=0; i<numFrames; i++){
-					if(i==startFrame-1)
-						obj.sequence[0][i] = {'type':'text', 'x':xCoordinate, 'y':yCoordinate, 'length': endFrame-startFrame, 'text':textInput, 'layer':'savedText'};
-					else
-						obj.sequence[0][i] = {}
-				}
-				
-				
-				var filepath = "file:///C:/Users/Nejko/Documents/test.json"; // Get the current file
-				filepath = $.twFile.convertUriToLocalPath(filepath); // Convert the path to a readable format
-				var text = $.twFile.save(filepath,obj); // Load the file
-				
-				if(text)
-					alert("Saved successfully");
-					
-				// ajax resitev, ki bo shranila v tekstovno datoteko na strezniku
-				var text2 = JSON.stringify(obj,text2);
-				
-				$.ajax({
-					type: "POST",
-					dataType: "json",
-					url: "https://dl.dropbox.com/u/95398407/JansaNejcDiplomskaNaloga/test.json",
-					data: text2,
-					success: function(data) {
-             			alert('success : ' + JSON.stringify(data));
-            		},
-            		error: function(data) {
-             			alert('Error : ' + JSON.stringify(data));
-            		} 	
-				});*/
-			}
-			else{}
-    	});		
-		
-		var inputTextDraw = function(){
-			if(Math.floor((theVideo.currentTime*points.frameRate).toPrecision(3))== drawText.startFrame)
-			{
-				text2(drawText.xCoordinate,drawText.yCoordinate,drawText.textInput, drawText.textCanvNum); 
-			}
-			else if(Math.floor((theVideo.currentTime*points.frameRate).toPrecision(3)) <= drawText.endFrame)
-				{}
-			else
-				blank(drawText.textCanvNum);	
-		}
 		
 		//  Izracun width, height in ratio videa  
 		theVideo.addEventListener('loadedmetadata', function() {
 			ratio = theVideo.videoWidth / theVideo.videoHeight;				
 			w = theVideo.videoWidth;				
-			h = parseInt(w/ratio, 10);				
+			h = parseInt(w/ratio, 10);	
+			for(var i=0; i<theCanvas.length; i++)
+			{			
+				theCanvas[i].width=w; 
+				theCanvas[i].height=h; 
+			}
+			$('#loading').addClass("hide");
+			$("#Layer1").css("border","dotted",3,"black");
+			$("#progressBar").removeClass("hide").addClass("showPlayed");
+			$("#playPause").removeClass("hide").addClass("showPlayed");
+			$("#stop").removeClass("hide").addClass("showPlayed");
+			$("#textInput").removeClass("hide").addClass("show");
+			$("#buttons").removeClass("hide").addClass("show");
+			$("#textInput").css("margin-top",h-h-h-60); $("#textInput").css("left", w+200);
+			$("#buttons").css("margin-top",h-h-h-60); $("#buttons").css("left", w);
+			$("#progressBar").css("margin-top",h+40);
+			$("#progressBar").css("width",w);
+			$("#playPause").css("margin-top",h+60);
+			$("#stop").css("margin-top",h+60);
+			document.getElementById("counter").innerHTML = "Frame: ";
+			$("#counter").css("margin-left",w-180);  
+			
 		}, false);	
 		
 		// Po kliku na play prikaze vse atribute v canvasih
 		theVideo.addEventListener('play', function() {
 			setInterval(snap, 1000/points.frameRate);
 			setInterval(rect, 1000/points.frameRate);
-			setInterval(text, 1000/points.frameRate);
 //			if($('#textCanvas').length > 0)
 //				setInterval(inputTextDraw, 1000/points.frameRate);
 //			setInterval(textShow, 1000/points.frameRate);
@@ -849,31 +705,55 @@ $(document).ready(function() {
 			}
 		});
 		
+		/*Tu se zacnejo funkcije, kjer dodajamo layer s textom*/
+		
+		var textInput; var startFrame; var endFrame; var xCoordinate; var yCoordinate;
+		var drawText = {};
+		
+		$('#submit').click(function() {
+        	var textCanvNum=0;
+			
+			if($('#tinput').val() != null)
+				 textInput = $('#tinput').val();
+			if($('#sframe').val() != null)
+				 startFrame = parseInt($('#sframe').val());
+			if($('#eframe').val() != null)
+				 endFrame = parseInt($('#eframe').val());
+		    if($('#xcoord').val() != null)
+				 xCoordinate = parseInt($('#xcoord').val());
+			if($('#ycoord').val() != null)
+				 yCoordinate = parseInt($('#ycoord').val());	
+			
+			
+			if(startFrame >= 0 && startFrame <= points.rect.x1.length && endFrame >=  0 && endFrame <= points.rect.x1.length
+			&& xCoordinate >= 0 && xCoordinate <= theCanvas[0].width && yCoordinate >= 0 && yCoordinate <= theCanvas[0].height 
+			&& startFrame < endFrame){
+				textCanvNum = numCanvas+parseInt(3);
+				$(".canvasPlayer").append("<canvas id='textCanvas' class='show' style='position:absolute; z-index:"+textCanvNum+";' width = "+theCanvas[0].width+" height = "+theCanvas[0].height+"></canvas>");
+				canvasName[numCanvas+parseInt(1)] = {"layer" : "textCanvas"};
+				theCanvas[numCanvas+parseInt(2)] = document.getElementById("textCanvas");
+				ctx[numCanvas+parseInt(2)] = theCanvas[numCanvas+parseInt(2)].getContext("2d");
+				drawText = {"textInput":textInput, "startFrame":startFrame, "endFrame":endFrame, "xCoordinate":xCoordinate, "yCoordinate":yCoordinate, "textCanvNum":textCanvNum-1};
+			}
+			else{
+				alert("wrong data");
+				$('#textCanvas').remove();
+			}
+    	});		
+		
+		var inputTextDraw = function(){
+			if(Math.floor((theVideo.currentTime*points.frameRate).toPrecision(3))== drawText.startFrame)
+			{
+				text(drawText.xCoordinate,drawText.yCoordinate,drawText.textInput, drawText.textCanvNum); 
+			}
+			else if(Math.floor((theVideo.currentTime*points.frameRate).toPrecision(3)) <= drawText.endFrame)
+				{}
+			else
+				blank(drawText.textCanvNum);	
+	  }
+		
+		theVideo.addEventListener('play', function(){
+			
+		}, false);
+		
 	});		
-</script>
-</head>
-<body>
-    <div id="loading" ><p>Please wait while loading...</p></div>
-    <div class="canvasPlayer">
-        <video id="firstVideo" src="video/ninja_cat.mp4" muted="true">Unsupported video on your browser. Get new browser</video>
-		<canvas id="Layer1" style="position:absolute; z-index:1;"></canvas>
-	</div>
-    <div id="progressBar" class="hide"><span id="played"></span></div>
-    <div>
-    	<button id="playPause" title="play" class="hide" muted="true">Play</button>
-        <button id="stop" class="hide">Stop</button>
-        <p id="counter"></p>
-    </div>
-	<p>&nbsp;</p>
-	<ul id="buttons" class="hide">
-    </ul>
-    <!-- <div id="textInput" class="hide">
-  		Text input <input id="tinput" type="text" name="tinput" size="32" maxlength="52" /><p class="hide" id="inputText">No text in this textbox</p><br />
-  		Start Frame <input id="sframe" type="text" name="sframe" maxlength="3" size="5" /><p class="hide" id="inputSFrame">Wrong startFrame</p><br />
-        End Frame <input id="eframe" type="text" name="eframe" maxlength="3" size="5" /><p class="hide" id="inputEFrame">Wrong endFrame</p><br />
-        X coordiante <input id="xcoord" type="text" name="xcoord" maxlength="3" size="5" /><p class="hide" id="inputXCoord">Wrong xCoordinate</p><br />
-        Y coordinate <input id="ycoord" type="text" name="ycoord" maxlength="3" size="5" /><p class="hide" id="inputYCoord">Wrong yCoordinate</p><br />
-  		<button id="submit" title="Submit">Submit</button>
-    </div> -->
-</body>
-</html>
