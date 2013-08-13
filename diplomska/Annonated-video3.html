@@ -34,7 +34,13 @@ $(document).ready(function() {
 		var numCanvas=0; var numFrames=0;
 		var ajaxEnded=0;
 		
-		$.ajax({
+		//  Izracun width, height in ratio videa ter napolnitev tabel iz ajax funkcije  
+		theVideo.addEventListener('loadedmetadata', function() {
+			ratio = theVideo.videoWidth / theVideo.videoHeight;				
+			w = theVideo.videoWidth;				
+			h = parseInt(w/ratio, 10);
+			
+			$.ajax({
 			type: "GET",
 			dataType: "json",
 			url: "https://dl.dropbox.com/u/95398407/JansaNejcDiplomskaNaloga/showText2.json",
@@ -279,6 +285,10 @@ $(document).ready(function() {
 					}, false);	
 				}
 			});
+			
+							
+		}, false);	
+
 		// Stevilo layerjev v objektu
 		
 		/* Funkcije, kjer se risejo stvari */
@@ -753,14 +763,7 @@ $(document).ready(function() {
 			else
 				blank(drawText.textCanvNum);	
 		}
-		
-		//  Izracun width, height in ratio videa  
-		theVideo.addEventListener('loadedmetadata', function() {
-			ratio = theVideo.videoWidth / theVideo.videoHeight;				
-			w = theVideo.videoWidth;				
-			h = parseInt(w/ratio, 10);				
-		}, false);	
-		
+				
 		// Po kliku na play prikaze vse atribute v canvasih
 		theVideo.addEventListener('play', function() {
 			setInterval(snap, 1000/points.frameRate);
